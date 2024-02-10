@@ -162,8 +162,38 @@ public static class UnixJunctions
     }
 
     private static string ToUnixPath(string windowsPath)
+    
+    // Check game install location
+    // Steam deck is known to put external sd games in either /run/media/mmcblk0p1/* or /run/media/mmcblk0p1/SteamLibrary/*
+    // Change this later to only run the check once
+    //
+    /*
+    var localInstall = "Z:\home\deck\.steam\steam\steamapps\common\221100"
+    var externalInstall = "E:\steamapps\common\221100"
+    var externalLibrary = "E:\SteamLibrary\steamapps\common\221100"
+
+    if (!Directory.Exists(localInstall))
+        {
+            var result = windowsPath.Replace("Z:", string.Empty).Replace("\\", "/");
+            Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
+            return result;
+        }
+    else if (!Directory.Exists(externalInstall))
+        {
+            var result = windowsPath.Replace("E:", "/run/media/mmcblk0p1").Replace("\\", "/");
+            Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
+            return result;
+        }
+    else if (!Directory.Exists(externalLibrary))
+        {
+            var result = windowsPath.Replace("E:", "/run/media/mmcblk0p1/SteamLibrary").Replace("\\", "/");
+            Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
+            return result;
+        }
+    
+    */
     {
-        var result = windowsPath.Replace("Z:", string.Empty).Replace("\\", "/");
+        var result = windowsPath.Replace("E:", "/run/media/mmcblk0p1").Replace("\\", "/");
         Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
         return result;
     }
