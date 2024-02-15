@@ -140,6 +140,11 @@ public static class UnixJunctions
                 Console.WriteLine($"UnixJunctions: Error executing script '{uniqueId}'. Exit code: {process.ExitCode}");
             }
         }
+        /*
+
+        // Bodge fix test
+        // Hanging the launcher on 1.23 - Enters preventativesync eternal loop.
+        // Can't delete lock file - file doesn't exist
 
         while (!File.Exists(tempOutputPath))
         {
@@ -152,6 +157,7 @@ public static class UnixJunctions
             Console.WriteLine("UnixJunctions.RunShellCommand: waiting for unix write unlock " + uniqueId);
             Thread.Sleep(50);
         }
+        */
 
         // Read the output file
         string scriptOutput = File.ReadAllText(tempOutputPath);
