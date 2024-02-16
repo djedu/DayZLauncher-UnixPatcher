@@ -102,7 +102,7 @@ public static class UnixJunctions
         Console.WriteLine("UnixJunctions.RunShellCommand: command= " + command + " ;arguments= " + arguments);
 
         var gameLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        var basePath = gameLocation + @"\!Linux";
+        var basePath = gameLocation + @"\linux-temp";
         Directory.CreateDirectory(basePath);
 
         string uniqueId = Guid.NewGuid().ToString("N");
@@ -144,7 +144,7 @@ public static class UnixJunctions
         // Bodge fix test
         // Hanging the launcher on 1.23 - Enters preventativesync eternal loop.
         // Can't delete lock file - file doesn't exist
-        /*
+        
         while (!File.Exists(tempOutputPath))
         {
             Console.WriteLine("UnixJunctions.RunShellCommand: waiting for output file " + uniqueId);
@@ -156,7 +156,7 @@ public static class UnixJunctions
             Console.WriteLine("UnixJunctions.RunShellCommand: waiting for unix write unlock " + uniqueId);
             Thread.Sleep(50);
         }
-        */
+        
         // Read the output file
         string scriptOutput = File.ReadAllText(tempOutputPath);
         Console.WriteLine($"UnixJunctions.RunShellCommand: {uniqueId} output= {scriptOutput}");
