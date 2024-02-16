@@ -102,7 +102,7 @@ public static class UnixJunctions
         Console.WriteLine("UnixJunctions.RunShellCommand: command= " + command + " ;arguments= " + arguments);
 
         var gameLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        var basePath = gameLocation + @"\linux-temp";
+        var basePath = gameLocation + @"\linux-temp";   // unix commands (rm, touch) not working in directory with "!".
         Directory.CreateDirectory(basePath);
 
         string uniqueId = Guid.NewGuid().ToString("N");
@@ -141,10 +141,6 @@ public static class UnixJunctions
             }
         }
         
-        // Bodge fix test
-        // Hanging the launcher on 1.23 - Enters preventativesync eternal loop.
-        // Can't delete lock file - file doesn't exist
-        
         while (!File.Exists(tempOutputPath))
         {
             Console.WriteLine("UnixJunctions.RunShellCommand: waiting for output file " + uniqueId);
@@ -167,7 +163,7 @@ public static class UnixJunctions
 
     private static string ToUnixPath(string windowsPath)
     {
-        var result = windowsPath.Replace("E:", "/run/media/mmcblk0p1").Replace("\\", "/");
+        var result = windowsPath.Replace($"'{DZPatch_WinDrive}', '{DZPatch_UnixPath}'").Replace("\\", "/"); // Read drive and path to replace from registry
         Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
         return result;
     }

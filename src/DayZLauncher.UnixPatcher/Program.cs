@@ -57,6 +57,41 @@ catch (Exception e)
     File.Move(backupAssembly, targetAssembly);
 }
 
+Common.WriteLine("Checking unix path", ConsoleColor.Green);
+// Check absolute unix path and write instructions to registry
+// This probably won't work as run from unix..........
+// var localInstall = "Z:\home\deck\.steam\steam\steamapps\common\DayZ"
+// var externalType1 = "E:\steamapps\common\DayZ"
+// var externalType2 = "E:\SteamLibrary\steamapps\common\DayZ"
+// This might?
+var localInstall = "/home/deck/.steam/steam/steamapps/common/DayZ";
+var externalType1 = "/run/media/mmcblk0p1/steamapps/common/DayZ";
+var externalType2 = "/run/media/mmcblk0p1/SteamLibrary/steamapps/common/DayZ";
+if (!Directory.Exists(localInstall))
+{
+    Environment.SetEnvironmentVariable("DZPatch_WinDrive", "Z:", EnvironmentVariableTarget.Machine);
+    Environment.SetEnvironmentVariable("DZPatch_UnixPath", string.Empty, EnvironmentVariableTarget.Machine);
+    Common.Writeline($"Found DayZ directory in '{localInstall}'", ConsoleColor.Green);
+}
+else if (!Directory.Exists(externalType1))
+{
+    Environment.SetEnvironmentVariable("DZPatch_WinDrive", "E:", EnvironmentVariableTarget.Machine);
+    Environment.SetEnvironmentVariable("DZPatch_UnixPath", "/run/media/mmcblk0p1", EnvironmentVariableTarget.Machine);
+    Common.Writeline($"Found DayZ directory in '{externalType1}'", ConsoleColor.Green);
+}
+else if (!Directory.Exists(externalType2))
+{
+    Environment.SetEnvironmentVariable("DZPatch_WinDrive", "E:", EnvironmentVariableTarget.Machine);
+    Environment.SetEnvironmentVariable("DZPatch_UnixPath", "/run/media/mmcblk0p1/SteamLibrary", EnvironmentVariableTarget.Machine);
+    Common.Writeline($"Found DayZ directory in '{externalType2}'", ConsoleColor.Green);
+}
+else {
+    Environment.SetEnvironmentVariable("DZPatch_WinDrive", "Z:", EnvironmentVariableTarget.Machine);
+    Environment.SetEnvironmentVariable("DZPatch_UnixPath", string.Empty, EnvironmentVariableTarget.Machine);
+    Common.Writeline($"Unable to find unix path! Setting to steam default ('{localInstall}')", ConsoleColor.Red);
+    Common.Writeline("Patch may fail!", ConsoleColor.Red);
+}
+
 Common.WriteLine("Applying launcher settings fix...");
 try
 {
