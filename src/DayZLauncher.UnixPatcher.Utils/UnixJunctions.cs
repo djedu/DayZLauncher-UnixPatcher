@@ -163,7 +163,9 @@ public static class UnixJunctions
 
     private static string ToUnixPath(string windowsPath)
     {
-        var result = windowsPath.Replace($"'{DZPatch_WinDrive}', '{DZPatch_UnixPath}'").Replace("\\", "/"); // Read drive and path to replace from registry
+        var val1 = Environment.GetEnvironmentVariable(DZPatch_WinDrive, EnvironmentVariableTarget.Machine) ?? "(none)";
+        var val2 = Environment.GetEnvironmentVariable(DZPatch_UnixPath, EnvironmentVariableTarget.Machine) ?? "(none)";
+        var result = windowsPath.Replace($"'{val1}', '{val2}'").Replace("\\", "/"); // Read drive and path to replace from registry
         Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
         return result;
     }
