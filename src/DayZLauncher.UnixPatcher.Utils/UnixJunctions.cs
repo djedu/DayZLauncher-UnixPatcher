@@ -60,7 +60,7 @@ public static class UnixJunctions
 
                 List<string> libraryFolders = new List<string>();
                 string libraryFile = steamPath + @"\steamapps\libraryfolders.vdf";
-                Regex libraryRegex = new Regex(@"path\"\s*\"([A-z+\/+.]*)\"");
+                Regex libraryRegex = new Regex("path\"\s*\"([A-Za-z0-9+\/+.+-]*)\"");
                 using (StreamReader reader = new StreamReader(libraryFile))
                 {
                     string line;
