@@ -19,6 +19,8 @@ namespace DayZLauncher.UnixPatcher.Utils;
 public static class UnixJunctions
 {
     private static bool IsRunningOnMono => Type.GetType("Mono.Runtime") != null;
+    private static string steamDrive;
+    private static string steamPath;
 
     static UnixJunctions()
     {
@@ -76,12 +78,12 @@ public static class UnixJunctions
         string dayZPath = appFolder();
         if (dayZPath != null)
         {
-            string steamDrive = Path.GetPathRoot(dayZPath).Replace("\\", "");
+            steamDrive = Path.GetPathRoot(dayZPath).Replace("\\", "");
             int start = steamDrive.Length;
             int end = dayZPath.IndexOf("\\steamapps");
             if (end > start)
             {
-                string steamPath = dayZPath.Substring(start, end - start);
+                steamPath = dayZPath.Substring(start, end - start);
             }
             else
             {
