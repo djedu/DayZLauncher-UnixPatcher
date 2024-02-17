@@ -49,6 +49,7 @@ public static class UnixJunctions
                         {
                             steamPath = Regex.Unescape(match.Value).Replace(@"\\", @"\");
                             Console.WriteLine($"UnixJunctions.LibraryFolders: Found wine folder at: {steamPath}");
+                            break;
                         }
                     }
                 }
