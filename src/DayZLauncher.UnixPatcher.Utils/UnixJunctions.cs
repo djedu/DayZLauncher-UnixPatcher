@@ -34,7 +34,7 @@ public static class UnixJunctions
             {
                 List<string> folders = new List<string>();
 
-                string steamFolder = @"C:\Program Files(x86)\Steam\steamapps\";
+                string steamFolder = @"C:\Program Files (x86)\Steam\steamapps\";
                 folders.Add(steamFolder);
 
                 string configFile = steamFolder + "libraryfolders.vdf";
