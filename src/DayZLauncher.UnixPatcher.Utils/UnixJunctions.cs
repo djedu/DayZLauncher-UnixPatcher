@@ -3,6 +3,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Linq;
+
 
 namespace DayZLauncher.UnixPatcher.Utils;
 
@@ -23,7 +27,7 @@ public static class UnixJunctions
             Console.WriteLine("UnixJunctions: running on Mono runtime!");
         }
 
-        static List<string> LibraryFolders()
+        List<string> LibraryFolders()
         {
         	List<string> folders = new List<string>();
 
@@ -48,7 +52,7 @@ public static class UnixJunctions
             return folders;
         }
 
-        static string appFolder()
+        string appFolder()
         {
             var appFolders = LibraryFolders().Select(x => x + "\\steamapps\\common");
             foreach (var folder in appFolders)
@@ -67,6 +71,7 @@ public static class UnixJunctions
                 }
 
             }
+            return null; // Add a return statement to ensure a value is always returned
         }
         string dayZPath = appFolder();
         if (dayZPath != null)
