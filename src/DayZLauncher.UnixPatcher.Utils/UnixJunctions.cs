@@ -19,9 +19,10 @@ namespace DayZLauncher.UnixPatcher.Utils;
 public static class UnixJunctions
 {
     private static bool IsRunningOnMono => Type.GetType("Mono.Runtime") != null;
-    private static string steamDrive;
+    private static string steamFolder;
     private static string steamPath;
-
+    private static string appFolder;
+    
     static UnixJunctions()
     {
         if (IsRunningOnMono)
@@ -46,14 +47,6 @@ public static class UnixJunctions
                         {
                             steamPath = Regex.Unescape(match.Value).Replace(@"\\", @"\");
                             Console.WriteLine($"UnixJunctions.LibraryFolders: Found wine folder at: {steamPath}");
-                            return steamPath;
-                        }
-                        Match match = driveRegex.Match(line);
-                        if (match.Success)
-                        {
-                            externalDrive = Regex.Unescape(match.Value).Replace(@"\\", "");
-                            Console.WriteLine($"UnixJunctions.LibraryFolders: Found external drive at: {externalDrive}");
-                            return externalDrive;
                         }
                     }
                 }
@@ -69,7 +62,8 @@ public static class UnixJunctions
                         Match match = wineRegex.Match(line);
                         if (match.Success)
                         {
-                            steamFolder = Regex.Unescape(match.Groups[1].Value) + @"/steamapps/common";
+                            string matchBuild = Regex.Unescape(match.Groups[1].Value) + @"/steamapps/common";
+                            steamFolder = "Z:" + matchBuild.Replace(@"/", @"\");
                             libraryFolders.Add(steamFolder);
                             Console.WriteLine($"UnixJunctions.LibraryFolders: Found steam library folder at: {steamFolder}");
                         }
@@ -80,7 +74,7 @@ public static class UnixJunctions
             
             string AppFolder()
             {
-                var appFolders = "Z:" + LibraryFolders().Select(x => x).Replace(@"/", @"\");
+                var appFolders = LibraryFolders().Select(x => x);
                 foreach (var folder in appFolders)
                 {
                     try
