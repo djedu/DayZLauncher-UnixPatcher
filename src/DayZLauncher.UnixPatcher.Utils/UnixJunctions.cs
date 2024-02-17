@@ -58,7 +58,7 @@ public static class UnixJunctions
 
             string AppFolder()
             {
-                var As = LibraryFolders().Select(x => x + "\\steamapps\\common");
+                var appFolders = LibraryFolders().Select(x => x + "\\steamapps\\common");
                 foreach (var folder in appFolders)
                 {
                     try
