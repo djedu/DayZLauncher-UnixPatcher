@@ -253,7 +253,7 @@ public static class UnixJunctions
         if (steamPath == null)
         {
             Console.WriteLine("UnixJunctions.ToUnixPath: steamPath is null, using defaults");
-            steamPath = string.empty;
+            steamPath = "";
         }
         var result = windowsPath.Replace(steamDrive, steamPath).Replace("\\", "/");
         Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
