@@ -20,8 +20,10 @@ public static class UnixJunctions
 {
     private static bool IsRunningOnMono => Type.GetType("Mono.Runtime") != null;
     private static string steamFolder;
+    private static string steamDrive;
     private static string steamPath;
     private static string appFolder;
+    private static string absolutePath;
     
     static UnixJunctions()
     {
