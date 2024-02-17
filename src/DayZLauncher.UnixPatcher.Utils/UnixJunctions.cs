@@ -38,7 +38,7 @@ public static class UnixJunctions
                 string wineFolder = @"C:\Program Files (x86)\Steam\steamapps";
                 string wineFile = wineFolder + @"\libraryfolders.vdf";
                 Regex wineRegex = new Regex("[A-Z]:\\\\.[A-z+.]*");
-                Regex driveRegex = new Regex("[A-Z]:\\\\");
+                Console.WriteLine("UnixJunctions.LibraryFolders: Searching for Steam directory")
                 using (StreamReader reader = new StreamReader(wineFile))
                 {
                     string line;
@@ -57,12 +57,13 @@ public static class UnixJunctions
                 List<string> libraryFolders = new List<string>();
                 string libraryFile = steamPath + @"\steamapps\libraryfolders.vdf";
                 Regex libraryRegex = new Regex(@"path\x22\s*\x22([A-Za-z0-9+\x2F+\x2D+\x2E]*)\x22");
+                Console.WriteLine("UnixJunctions.LibraryFolders: Searching for library folders")
                 using (StreamReader reader = new StreamReader(libraryFile))
                 {
                     string line;
                     while ((line = reader.ReadLine()) != null)
                     {
-                        Match match = wineRegex.Match(line);
+                        Match match = libraryRegex.Match(line);
                         if (match.Success)
                         {
                             string matchBuild = Regex.Unescape(match.Groups[1].Value) + @"/steamapps/common";
@@ -78,6 +79,7 @@ public static class UnixJunctions
             string AppFolder()
             {
                 var appFolders = LibraryFolders().Select(x => x);
+                Console.WriteLine("UnixJunctions.AppFolder: Searching library for DayZ")
                 foreach (var folder in appFolders)
                 {
                     try
@@ -265,7 +267,7 @@ public static class UnixJunctions
 
     private static string ToUnixPath(string windowsPath)
     {
-        var result = Regex.Replace(windowsPath, "[A-Z]:\\", $"{absolutePath}").Replace("\\", "/");
+        var result = Regex.Replace(windowsPath, @"[A-Z]:\", $"{absolutePath}").Replace("\\", "/");
         Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
         return result;
     }
