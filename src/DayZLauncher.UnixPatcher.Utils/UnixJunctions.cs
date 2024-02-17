@@ -39,7 +39,7 @@ public static class UnixJunctions
 
                 string configFile = steamFolder + "libraryfolders.vdf";
 
-                Regex regex = new Regex("[A-Z]:\\\\.*");
+                Regex regex = new Regex("[A-Z]:\\\\.[A-z+.]*");
                 using (StreamReader reader = new StreamReader(configFile))
                 {
                     string line;
@@ -49,13 +49,54 @@ public static class UnixJunctions
                         if (match.Success)
                         {
                             folders.Add(Regex.Unescape(match.Value));
-                            Console.WriteLine($"UnixJunctions.LibraryFolders: Found library folder: {match.Value}");
+                            Console.WriteLine($"UnixJunctions.LibraryFolders: Found library folder: '{match.Value}'");
                         }
                     }
                 }
                 return folders;
             }
+            /*
+            string SteamFolders()
+            {
+                var steamFolder = LibraryFolders()(folders[1] + "\\steamapps");
+                Console.WriteLine($"UnixJunctions.SteamFolders: Found steam folder at {steamFolder}");
+                string configFile = steamFolder + "libraryfolders.vdf";
 
+                Regex regex = new Regex("\/run\/.*");
+                using (StreamReader reader = new StreamReader(configFile))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        Match match = regex.Match(line);
+                        if (match.Success)
+                        {
+                            Console.WriteLine($"UnixJunctions.SteamFolders: Found library folder: {match.Value}");
+                            unixPaths.Add(Regex.Unescape(match.Value));
+                        }
+                    }
+                    foreach (var folder in unixPaths)
+                    {
+                        try
+                        {
+                            var matches = Directory.GetDirectories(folder, "steamapps", EnumerationOptions.RecurseSubdirectories | EnumerationOptions.MaxRecursionDepth(2));
+                            if (matches.Length >= 1)
+                            {
+                                Console.WriteLine($"UnixJunctions.SteamFolders: Found app folder: {matches[0]}");
+                                return matches[0];
+                            }
+                        }
+                        catch (DirectoryNotFoundException)
+                        {
+                            //continue;
+                        }
+
+                    }
+                    return null; // Add a return statement to ensure a value is always returned
+                }
+                return unixPaths;
+            }
+            */
             string AppFolder()
             {
                 var appFolders = LibraryFolders().Select(x => x + "\\steamapps\\common");
@@ -63,6 +104,7 @@ public static class UnixJunctions
                 {
                     try
                     {
+                        Console.Write($"UnixJunctions.AppFolder: Searching for DayZ in {folder}...");
                         var matches = Directory.GetDirectories(folder, "DayZ");
                         if (matches.Length >= 1)
                         {
@@ -103,6 +145,18 @@ public static class UnixJunctions
                 steamDrive = "Z:";
                 steamPath = "";
             }
+            /*
+            if (steamDrive != "Z:")
+            {
+                Console.WriteLine($"UnixJunctions.AppFolder: DayZ is installed on external drive. Finding absolute unix path...");
+                string unixPath = SteamFolders();
+                if (unixPath!= null)
+                {
+                    Console.WriteLine($"UnixJunctions.AppFolder: Found absolute unix path: {unixPath}");
+                    steamPath = unixPath.Replace("/steamapps", "")
+                }
+            }
+            */
         }
         catch (Exception ex)
         {
