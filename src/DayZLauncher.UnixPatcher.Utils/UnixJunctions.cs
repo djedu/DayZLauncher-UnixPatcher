@@ -23,7 +23,7 @@ public static class UnixJunctions
             Console.WriteLine("UnixJunctions: running on Mono runtime!");
         }
 
-        public static List<string> LibraryFolders()
+        static List<string> LibraryFolders()
         {
         	List<string> folders = new List<string>();
 
@@ -48,7 +48,7 @@ public static class UnixJunctions
             return folders;
         }
 
-        public static string appFolder()
+        static string appFolder()
         {
             var appFolders = LibraryFolders().Select(x => x + "\\steamapps\\common");
             foreach (var folder in appFolders)
