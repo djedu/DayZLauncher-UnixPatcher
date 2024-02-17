@@ -39,7 +39,7 @@ public static class UnixJunctions
 
                 string configFile = steamFolder + "libraryfolders.vdf";
 
-                Regex regex = new Regex("[A-Z]:\\.*");
+                Regex regex = new Regex("[A-Z]:\\\\.*");
                 using (StreamReader reader = new StreamReader(configFile))
                 {
                     string line;
