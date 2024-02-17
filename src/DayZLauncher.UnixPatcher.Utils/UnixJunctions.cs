@@ -38,7 +38,7 @@ public static class UnixJunctions
                 string wineFolder = @"C:\Program Files (x86)\Steam\steamapps";
                 string wineFile = wineFolder + @"\libraryfolders.vdf";
                 Regex wineRegex = new Regex("[A-Z]:\\\\.[A-z+.]*");
-                Console.WriteLine("UnixJunctions.LibraryFolders: Searching for Steam directory")
+                Console.WriteLine("UnixJunctions.LibraryFolders: Searching for Steam directory");
                 using (StreamReader reader = new StreamReader(wineFile))
                 {
                     string line;
@@ -57,7 +57,7 @@ public static class UnixJunctions
                 List<string> libraryFolders = new List<string>();
                 string libraryFile = steamPath + @"\steamapps\libraryfolders.vdf";
                 Regex libraryRegex = new Regex(@"path\x22\s*\x22([A-Za-z0-9+\x2F+\x2D+\x2E]*)\x22");
-                Console.WriteLine("UnixJunctions.LibraryFolders: Searching for library folders")
+                Console.WriteLine("UnixJunctions.LibraryFolders: Searching for library folders");
                 using (StreamReader reader = new StreamReader(libraryFile))
                 {
                     string line;
@@ -79,7 +79,7 @@ public static class UnixJunctions
             string AppFolder()
             {
                 var appFolders = LibraryFolders().Select(x => x);
-                Console.WriteLine("UnixJunctions.AppFolder: Searching library for DayZ")
+                Console.WriteLine("UnixJunctions.AppFolder: Searching library for DayZ");
                 foreach (var folder in appFolders)
                 {
                     try
