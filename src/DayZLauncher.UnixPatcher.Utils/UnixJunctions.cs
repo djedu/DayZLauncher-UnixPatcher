@@ -22,6 +22,71 @@ public static class UnixJunctions
         {
             Console.WriteLine("UnixJunctions: running on Mono runtime!");
         }
+
+        public static List<string> LibraryFolders()
+        {
+        	List<string> folders = new List<string>();
+
+            string steamFolder = @"C:\Program Files(x86)\Steam\steamapps\";
+            folders.Add(steamFolder);
+
+            string configFile = steamFolder + "libraryfolders.vdf";
+
+            Regex regex = new Regex("[A-Z]:\\.*");
+            using (StreamReader reader = new StreamReader(configFile))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    Match match = regex.Match(line);
+                    if (match.Success)
+                    {
+                        folders.Add(Regex.Unescape(match.Groups[1].Value));
+                    }
+                }
+            }
+            return folders;
+        }
+
+        public static string appFolder()
+        {
+            var appFolders = LibraryFolders().Select(x => x + "\\steamapps\\common");
+            foreach (var folder in appFolders)
+            {
+                try
+                {
+                    var matches = Directory.GetDirectories(folder, "DayZ");
+                    if (matches.Length >= 1)
+                    {
+                        return matches[0];
+                    }
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    //continue;
+                }
+
+            }
+        }
+        string dayZPath = appFolder();
+        if (dayZPath != null)
+        {
+            string steamDrive = Path.GetPathRoot(dayZPath).Replace("\\", "");
+            int start = steamDrive.Length;
+            int end = dayZPath.IndexOf("\\steamapps");
+            if (end > start)
+            {
+                string steamPath = dayZPath.Substring(start, end - start);
+            }
+            else
+            {
+                Console.WriteLine("Invalid DayZ path.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("DayZ installation not found.");
+        }
     }
 
     public static void Create(string junctionPoint, string targetDir, bool overwrite)
@@ -163,9 +228,7 @@ public static class UnixJunctions
 
     private static string ToUnixPath(string windowsPath)
     {
-        var val1 = Environment.GetEnvironmentVariable(DZPatch_WinDrive, EnvironmentVariableTarget.Machine) ?? "(none)";
-        var val2 = Environment.GetEnvironmentVariable(DZPatch_UnixPath, EnvironmentVariableTarget.Machine) ?? "(none)";
-        var result = windowsPath.Replace($"'{val1}', '{val2}'").Replace("\\", "/"); // Read drive and path to replace from registry
+        var result = windowsPath.Replace(steamDrive, steamPath).Replace("\\", "/");
         Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
         return result;
     }
