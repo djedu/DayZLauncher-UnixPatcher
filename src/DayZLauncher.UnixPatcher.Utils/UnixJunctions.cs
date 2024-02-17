@@ -48,17 +48,17 @@ public static class UnixJunctions
                         Match match = regex.Match(line);
                         if (match.Success)
                         {
-                            folders.Add(Regex.Unescape(match.Groups[1].Value));
-                            Console.WriteLine($"UnixJunctions.LibraryFolders: Added folder: {match.Groups[1].Value}");
+                            folders.Add(Regex.Unescape(match.Value));
+                            Console.WriteLine($"UnixJunctions.LibraryFolders: Found library folder: {match.Value}");
                         }
                     }
                 }
                 return folders;
             }
 
-            string appFolder()
+            string AppFolder()
             {
-                var appFolders = LibraryFolders().Select(x => x + "\\steamapps\\common");
+                var As = LibraryFolders().Select(x => x + "\\steamapps\\common");
                 foreach (var folder in appFolders)
                 {
                     try
@@ -67,7 +67,7 @@ public static class UnixJunctions
                         if (matches.Length >= 1)
                         {
                             return matches[0];
-                            Console.WriteLine($"UnixJunctions.appFolder: Found app folder: {matches[0]}");
+                            Console.WriteLine($"UnixJunctions.AppFolder: Found app folder: {matches[0]}");
                         }
                     }
                     catch (DirectoryNotFoundException)
@@ -78,26 +78,30 @@ public static class UnixJunctions
                 }
                 return null; // Add a return statement to ensure a value is always returned
             }
-            string dayZPath = appFolder();
+            string dayZPath = AppFolder();
             if (dayZPath != null)
             {
                 steamDrive = Path.GetPathRoot(dayZPath).Replace("\\", "");
-                Console.WriteLine($"UnixJunctions.appFolder: Found DayZ drive in {steamDrive}");
                 int start = steamDrive.Length;
                 int end = dayZPath.IndexOf("\\steamapps");
                 if (end > start)
                 {
                     steamPath = dayZPath.Substring(start, end - start);
-                    Console.WriteLine($"UnixJunctions.appFolder: Found DayZ path in {steamPath}");
+                    Console.WriteLine($"UnixJunctions.AppFolder: Found DayZ path in {steamPath}");
+                    Console.WriteLine($"UnixJunctions.AppFolder: Found DayZ drive in {steamDrive}");
                 }
                 else
                 {
-                    Console.WriteLine("UnixJunctions.appFolder: Invalid DayZ path.");
+                    Console.WriteLine("UnixJunctions.AppFolder: Invalid DayZ path, using defaults.");
+                    steamDrive = "Z:";
+                    steamPath = "";
                 }
             }
             else
             {
-                Console.WriteLine("UnixJunctions.appFolder: DayZ installation not found.");
+                Console.WriteLine("UnixJunctions.AppFolder: DayZ installation not found, using defaults.");
+                steamDrive = "Z:";
+                steamPath = "";
             }
         }
         catch (Exception ex)
