@@ -105,7 +105,7 @@ public static class UnixJunctions
             if (dayZPath != null)
             {
                 steamDrive = Path.GetPathRoot(dayZPath).Replace("\\", "");
-                int start = steamDrive.Length;
+                int start = steamDrive.Length + 1;
                 int end = dayZPath.IndexOf("\\steamapps");
                 if (end > start)
                 {
@@ -267,7 +267,7 @@ public static class UnixJunctions
 
     private static string ToUnixPath(string windowsPath)
     {
-        var result = Regex.Replace(windowsPath, @"[A-Z]:\", $"{absolutePath}").Replace("\\", "/");
+        var result = Regex.Replace(windowsPath, @"[A-Z]:", $"{absolutePath}").Replace("\\", "/");
         Console.WriteLine($"UnixJunctions.ToUnixPath: windowsPath='{windowsPath}', result='{result}'");
         return result;
     }
