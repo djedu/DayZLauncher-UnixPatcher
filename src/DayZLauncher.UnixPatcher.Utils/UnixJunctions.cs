@@ -118,7 +118,7 @@ public static class UnixJunctions
             if (dayZPath != null)
             {
                 steamDrive = Path.GetPathRoot(dayZPath).Replace("\\", "");
-                int start = steamDrive.Length + 1;
+                int start = steamDrive.Length;
                 int end = dayZPath.IndexOf("\\steamapps");
                 if (end > start)
                 {
